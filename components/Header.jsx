@@ -9,7 +9,6 @@ function Header() {
         <View style={styles.container}>
             <Logo />
 
-            <AddTask />
         </View>
     )
 }
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         justifyContent: "center",
-        position: "relative",
         height: 200,
         backgroundColor: colors.gray330,
     }

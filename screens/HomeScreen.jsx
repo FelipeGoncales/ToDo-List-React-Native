@@ -17,7 +17,7 @@ function HomeScreen() {
     const [listaFiltrada, setListaFiltrada] = useState([]);
 
     // Variável para controle da lista a set exibida
-    const [exibir, setExibir] = useState("criadas");
+    const [exibir, setExibir] = useState("all");
 
     // Variáveis para controle da quantidade de concluídos e pendentes
     const [totalCriado, setTotalCriado] = useState(0);
@@ -28,6 +28,15 @@ function HomeScreen() {
 
     // Input de pesquisa
     const [searchInput, setSearchInput] = useState("");
+
+    // Função para alterar exibição
+    function alterarExibir(text) {
+        if (text !== exibir) {
+            return setExibir(text);
+        }
+        // Define todas
+        return setExibir('all');
+    }
 
     // Função para cadastrar tarefa
     function cadastrarTarefa() {
@@ -114,6 +123,19 @@ function HomeScreen() {
 
     }, [lista, searchInput]);
 
+    // Função para organizar a lista
+    function organizarLista(copiaLista) {
+        // Cria listas para separar tarefas concluídas e pendentes
+        let tarefasConcluidas = []
+        let tarefasPendetes = []
+
+        // Filtra tarefas pendentes e concluídas
+        copiaLista.map((item) => item.concluido ? tarefasConcluidas.push(item) : tarefasPendetes.push(item));
+
+        // Une as duas listas
+        return tarefasPendetes.concat(tarefasConcluidas);
+    }
+
     // UseEffect para filtrar a lista de tarefas
     useEffect(() => {
         // Cria uma cópia da lista
@@ -123,14 +145,23 @@ function HomeScreen() {
         if (!searchInput.trim()) {
             if (exibir === "criadas") { // Criadas sem filtro
                 copiaLista = copiaLista.filter((item) => !item.concluido);
-            } else { // Concluídas sem filtro
+            } else if (exibir === 'concluidas') { // Concluídas sem filtro
                 copiaLista = copiaLista.filter((item) => item.concluido);
+            } else {
+                // Organiza a lista
+                copiaLista = organizarLista(copiaLista);
             }
         } else {
             if (exibir === "criadas") { // Criadas com filtro
                 copiaLista = copiaLista.filter((item) => !item.concluido && item.texto.toLowerCase().includes(searchInput.toLowerCase()));
-            } else { // Concluídas com filtro
+            } else if (exibir === 'concluidas') { // Concluídas com filtro
                 copiaLista = copiaLista.filter((item) => item.concluido && item.texto.toLowerCase().includes(searchInput.toLowerCase()));
+            } else {
+                // Organiza a lista
+                copiaLista = organizarLista(copiaLista);
+
+                // Filtra a lista
+                copiaLista = copiaLista.filter((item) => item.texto.toLowerCase().includes(searchInput.toLowerCase()));
             }
         }
 
@@ -146,8 +177,18 @@ function HomeScreen() {
             <AddTask fnCadastrar={cadastrarTarefa} inputCadastro={inputCadastro} setInputCadasto={setInputCadastro} />
 
             <View style={styles.container}>
-                <BtnCont type={"criadas"} numero={totalCriado} fnShow={() => setExibir('criadas')} />
-                <BtnCont type={"concluidas"} numero={totalConcluido} fnShow={() => setExibir('concluidas')} />
+                <BtnCont
+                    type={"criadas"}
+                    numero={totalCriado}
+                    fnShow={() => alterarExibir('criadas')}
+                    exibir={exibir === 'criadas' ? true : false}
+                />
+                <BtnCont
+                    type={"concluidas"}
+                    numero={totalConcluido}
+                    fnShow={() => alterarExibir('concluidas')}
+                    exibir={exibir === 'concluidas' ? true : false}
+                />
             </View>
 
             <SearchInput input={searchInput} setInput={setSearchInput} />

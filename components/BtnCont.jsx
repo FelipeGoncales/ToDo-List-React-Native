@@ -2,9 +2,9 @@ import {TouchableOpacity, Text, View, StyleSheet} from "react-native";
 import sizes from "../design/sizes";
 import colors from "../design/colors";
 
-function BtnCont({ type, action, numero }) {
+function BtnCont({ type, fnShow, numero }) {
     return (
-        <TouchableOpacity style={styles.container} onPress={action}>
+        <TouchableOpacity style={styles.container} onPress={fnShow}>
             <Text style={styles.title}>{ type == 'criadas' ? "Tarefas criadas" : "Concluídas" }</Text>
             <View style={ type == 'criadas' ? styles.bolinhaCriada : styles.bolinhaConcluida}>
                 <Text style={ type == 'criadas' ? styles.criadas : styles.concluidas}>{numero}</Text>
@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
     },
     criadas: {
         fontWeight: 'bold',
-        fontSize: sizes.sizeSmall,
+        fontSize: 14,
         color: colors.purpleDark,
     },
     concluidas: {
         fontWeight: 'bold',
-        fontSize: sizes.sizeSmall,
+        fontSize: 14,
         color: colors.greenDark,
     }
 })

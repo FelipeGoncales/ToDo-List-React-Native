@@ -2,11 +2,16 @@ import { View, StyleSheet, TextInput, TouchableOpacity, Image } from "react-nati
 import colors from "../design/colors";
 import sizes from "../design/sizes";
 
-function AddTask() {
+function AddTask({fnCadastrar, inputCadastro, setInputCadasto}) {
     return (
         <View style={styles.container}>
-            <TextInput style={styles.input} placeholder={"Adicione uma nova tarefa"} />
-            <TouchableOpacity style={styles.button}>
+            <TextInput
+                style={styles.input}
+                placeholder={"Adicione uma nova tarefa"}
+                value={inputCadastro}
+                onChangeText={setInputCadasto}
+            />
+            <TouchableOpacity style={styles.button} onPress={fnCadastrar}>
                 <Image source={require("../assets/add.png")} style={styles.image} />
             </TouchableOpacity>
         </View>
